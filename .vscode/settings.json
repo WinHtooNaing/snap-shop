@@ -1,0 +1,7 @@
+{
+    "notebook.formatOnSave.enabled": false,
+    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+    "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+    "files.trimTrailingWhitespaceInRegexAndStrings": false,
+    "editor.formatOnSave": true
+}
