@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { register } from "@/server/actions/register";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const Register = () => {
   const form = useForm({
@@ -30,7 +31,17 @@ const Register = () => {
       password: "",
     },
   });
-  const { execute, result, status } = useAction(register);
+  const { execute, result, status } = useAction(register, {
+    onSuccess({ data }) {
+      form.reset();
+      toast.success(data?.success, {
+        action: {
+          label: "Open Gmail",
+          onClick: () => window.open("https://mail.google.com/mail/u/0/#inbox"),
+        },
+      });
+    },
+  });
   const onSubmit = (values: z.infer<typeof registerSchema>) => {
     const { name, email, password } = values;
     execute({ name, email, password });
@@ -78,7 +89,7 @@ const Register = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="********" />
+                    <Input {...field} placeholder="********" type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
