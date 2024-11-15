@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { login } from "@/server/actions/login";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const Login = () => {
   const form = useForm({
@@ -29,7 +30,17 @@ const Login = () => {
       password: "",
     },
   });
-  const { execute, result, status } = useAction(login);
+  const { execute, result, status } = useAction(login, {
+    onSuccess({ data }) {
+      if (data?.error) {
+        toast.error(data?.error);
+        form.reset();
+      }
+      if (data?.success) {
+        toast.success(data?.success);
+      }
+    },
+  });
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     const { email, password } = values;
     execute({ email, password });
@@ -82,6 +93,7 @@ const Login = () => {
               "w-full mb-4",
               status === "executing" && "animate-pulse"
             )}
+            disabled={status === "executing"}
           >
             Login
           </Button>
